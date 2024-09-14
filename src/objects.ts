@@ -8,9 +8,18 @@ import { Question, QuestionType } from "./interfaces/question";
 export function makeBlankQuestion(
     id: number,
     name: string,
-    type: QuestionType
+    type: QuestionType,
 ): Question {
-    return {};
+    return {
+        id: id,
+        name: name,
+        type: type,
+        body: "",
+        expected: "",
+        options: [],
+        points: 1,
+        published: false,
+    };
 }
 
 /**
@@ -21,7 +30,9 @@ export function makeBlankQuestion(
  * HINT: Look up the `trim` and `toLowerCase` functions.
  */
 export function isCorrect(question: Question, answer: string): boolean {
-    return false;
+    return (
+        answer.trim().toLowerCase() === question.expected.trim().toLowerCase()
+    );
 }
 
 /**
@@ -31,6 +42,20 @@ export function isCorrect(question: Question, answer: string): boolean {
  * be exactly one of the options.
  */
 export function isValid(question: Question, answer: string): boolean {
+    // Short answer question accepts any input
+    if (question.type === "short_answer_question") {
+        return true;
+    }
+
+    // For multiple choice questions, the answer must be one of the options
+    else if (
+        question.type === "multiple_choice_question" &&
+        Array.isArray(question.options)
+    ) {
+        return question.options.includes(answer);
+    }
+
+    // Fallback for unrecognized question types
     return false;
 }
 
@@ -41,7 +66,9 @@ export function isValid(question: Question, answer: string): boolean {
  * name "My First Question" would become "9: My First Q".
  */
 export function toShortForm(question: Question): string {
-    return "";
+    const id = question.id;
+    const name = question.name.substring(0, 10);
+    return `${id}: ${name}`;
 }
 
 /**
@@ -62,15 +89,29 @@ export function toShortForm(question: Question): string {
  * Check the unit tests for more examples of what this looks like!
  */
 export function toMarkdown(question: Question): string {
-    return "";
-}
+    let markdown = `# ${question.name}\n${question.body || ""}`; // No trailing newline here
 
+    if (
+        question.type === "multiple_choice_question" &&
+        Array.isArray(question.options)
+    ) {
+        markdown += "\n"; // Add newline before options if there are any
+        question.options.forEach((option) => {
+            markdown += `- ${option}\n`; // Each option on a new line
+        });
+    }
+
+    return markdown.trim(); // Trim trailing newlines or spaces
+}
 /**
  * Return a new version of the given question, except the name should now be
  * `newName`.
  */
 export function renameQuestion(question: Question, newName: string): Question {
-    return question;
+    return {
+        ...question, // Spread the existing properties of the question
+        name: newName, // Override the name with the new name
+    };
 }
 
 /**
@@ -79,7 +120,10 @@ export function renameQuestion(question: Question, newName: string): Question {
  * published; if it was published, now it should be not published.
  */
 export function publishQuestion(question: Question): Question {
-    return question;
+    return {
+        ...question,
+        published: !question.published, // Invert the `published` field
+    };
 }
 
 /**
@@ -89,9 +133,17 @@ export function publishQuestion(question: Question): Question {
  * The `published` field should be reset to false.
  */
 export function duplicateQuestion(id: number, oldQuestion: Question): Question {
-    return oldQuestion;
+    return {
+        id: id, // Preserves the id for the new question
+        name: `Copy of ${oldQuestion.name}`,
+        body: oldQuestion.body,
+        type: oldQuestion.type,
+        options: oldQuestion.options, // Optionally handle if options is undefined
+        expected: oldQuestion.expected,
+        points: oldQuestion.points,
+        published: false,
+    };
 }
-
 /**
  * Return a new version of the given question, with the `newOption` added to
  * the list of existing `options`. Remember that the new Question MUST have
@@ -100,9 +152,18 @@ export function duplicateQuestion(id: number, oldQuestion: Question): Question {
  * Check out the subsection about "Nested Fields" for more information.
  */
 export function addOption(question: Question, newOption: string): Question {
-    return question;
-}
+    // Create a new options array by checking if question.options is defined
+    const updatedOptions =
+        Array.isArray(question.options) ?
+            [...question.options, newOption]
+        :   [newOption];
 
+    // Return a new question object with the updated options array
+    return {
+        ...question, // Copy all other properties from the original question
+        options: updatedOptions, // Set the new options array
+    };
+}
 /**
  * Consumes an id, name, and two questions, and produces a new question.
  * The new question will use the `body`, `type`, `options`, and `expected` of the
@@ -115,7 +176,16 @@ export function mergeQuestion(
     id: number,
     name: string,
     contentQuestion: Question,
-    { points }: { points: number }
+    { points }: { points: number },
 ): Question {
-    return contentQuestion;
+    return {
+        id: id,
+        name: name,
+        body: contentQuestion.body,
+        type: contentQuestion.type,
+        options: contentQuestion.options,
+        expected: contentQuestion.expected,
+        points: points,
+        published: false,
+    };
 }
