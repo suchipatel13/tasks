@@ -42,22 +42,19 @@ export function isCorrect(question: Question, answer: string): boolean {
  * be exactly one of the options.
  */
 export function isValid(question: Question, answer: string): boolean {
-    // Short answer question accepts any input
-    if (question.type === "short_answer_question") {
-        return true;
+    switch (question.type) {
+        case "short_answer_question":
+            return true;
+        case "multiple_choice_question":
+            return question.options.includes(answer):
+        
+        default:
+            return false;
     }
+ } 
 
-    // For multiple choice questions, the answer must be one of the options
-    else if (
-        question.type === "multiple_choice_question" &&
-        Array.isArray(question.options)
-    ) {
-        return question.options.includes(answer);
-    }
 
-    // Fallback for unrecognized question types
-    return false;
-}
+ 
 
 /**
  * Consumes a question and produces a string representation combining the
@@ -95,13 +92,13 @@ export function toMarkdown(question: Question): string {
         question.type === "multiple_choice_question" &&
         Array.isArray(question.options)
     ) {
-        markdown += "\n"; // Add newline before options if there are any
+        markdown += "\n"; 
         question.options.forEach((option) => {
-            markdown += `- ${option}\n`; // Each option on a new line
+            markdown += `- ${option}\n`; 
         });
     }
 
-    return markdown.trim(); // Trim trailing newlines or spaces
+    return markdown.trim(); 
 }
 /**
  * Return a new version of the given question, except the name should now be
