@@ -47,14 +47,11 @@ export function isValid(question: Question, answer: string): boolean {
             return true;
         case "multiple_choice_question":
             return question.options.includes(answer);
-        
+
         default:
             return false;
     }
- } 
-
-
- 
+}
 
 /**
  * Consumes a question and produces a string representation combining the
@@ -92,13 +89,13 @@ export function toMarkdown(question: Question): string {
         question.type === "multiple_choice_question" &&
         Array.isArray(question.options)
     ) {
-        markdown += "\n"; 
+        markdown += "\n";
         question.options.forEach((option) => {
-            markdown += `- ${option}\n`; 
+            markdown += `- ${option}\n`;
         });
     }
 
-    return markdown.trim(); 
+    return markdown.trim();
 }
 /**
  * Return a new version of the given question, except the name should now be
