@@ -46,7 +46,7 @@ export function isValid(question: Question, answer: string): boolean {
         case "short_answer_question":
             return true;
         case "multiple_choice_question":
-            return question.options.includes(answer):
+            return question.options.includes(answer);
         
         default:
             return false;
