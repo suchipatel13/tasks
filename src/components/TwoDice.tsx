@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 
 /**
@@ -16,31 +16,17 @@ export function TwoDice(): React.JSX.Element {
     const [leftDie, setLeftDie] = useState<number>(d6());
     const [rightDie, setRightDie] = useState<number>(d6());
 
-    // Ensure initial values are different
-    useEffect(() => {
-        while (leftDie === rightDie) {
-            setRightDie(d6());
-        }
-    }, [leftDie, rightDie]);
-
+    // Function to roll the left die
     const rollLeft = () => {
-        const newLeftDie = d6();
-        setLeftDie(newLeftDie);
-        // Update right die only if they are now equal
-        if (newLeftDie === rightDie) {
-            setRightDie(d6());
-        }
+        setLeftDie(d6());
     };
 
+    // Function to roll the right die
     const rollRight = () => {
-        const newRightDie = d6();
-        setRightDie(newRightDie);
-        // Update left die only if they are now equal
-        if (newRightDie === leftDie) {
-            setLeftDie(d6());
-        }
+        setRightDie(d6());
     };
 
+    // Determine the game status
     const getGameStatus = () => {
         if (leftDie === rightDie) {
             if (leftDie === 1) {
