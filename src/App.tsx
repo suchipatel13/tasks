@@ -11,7 +11,12 @@ import { ChooseTeam } from "./bad-components/ChooseTeam";
 import { ColoredBox } from "./bad-components/ColoredBox";
 import { DoubleHalf } from "./bad-components/DoubleHalf";
 import { ShoveBox } from "./bad-components/ShoveBox";
-import { ChooseTeam } from "./bad-components/ChooseTeam";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { CheckAnswer } from "./form-components/CheckAnswer";
+import { GiveAttempts } from "./form-components/GiveAttempts";
+import { EditMode } from "./form-components/EditMode";
+import { MultipleChoiceQuestion } from "./form-components/MultipleChoiceQuestion";
+import { ChangeColor } from "./form-components/ChangeColor";
 
 function App(): React.JSX.Element {
     return (
@@ -19,6 +24,60 @@ function App(): React.JSX.Element {
             <header style={{ color: "red" }} className="App-header">
                 <h1>UD CISC275 with React Hooks and TypeScript Suchi Patel.</h1>
             </header>
+            <div>Hello World</div>
+            <p>
+                Edit <code>src/App.tsx</code> and save. This page will
+                automatically reload.
+            </p>
+            <img src="" alt="This is image of a cookie"></img>
+            <ol>
+                <li>First</li>
+                <li>Second</li>
+                <li>Third</li>
+            </ol>
+
+            <Button
+                onClick={() => {
+                    console.log("Hello World!");
+                }}
+            >
+                Log Hello World
+            </Button>
+            <Container>
+                <Row>
+                    <Col>
+                        <div
+                            style={{
+                                width: "100%",
+                                height: "100px",
+                                backgroundColor: "red",
+                            }}
+                        ></div>
+                    </Col>
+                    <Col>
+                        <div
+                            style={{
+                                width: "100%",
+                                height: "100px",
+                                backgroundColor: "red",
+                            }}
+                        ></div>
+                    </Col>
+                </Row>
+            </Container>
+            <hr></hr>
+            <CheckAnswer expectedAnswer="42"></CheckAnswer>
+            <hr></hr>
+            <GiveAttempts></GiveAttempts>
+            <hr></hr>
+            <EditMode></EditMode>
+            <hr></hr>
+            <ChangeColor></ChangeColor>
+            <hr></hr>
+            <MultipleChoiceQuestion
+                options={["a", "b", "c"]}
+                expectedAnswer="b"
+            ></MultipleChoiceQuestion>
             <hr></hr>
             <DoubleHalf></DoubleHalf>
             <hr></hr>
